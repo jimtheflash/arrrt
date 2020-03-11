@@ -1,14 +1,14 @@
 devtools::load_all()
 ggplot2::theme_set(theme_arrrt())
 
-make_random_stacked_density(n_lines = 100,
+make_random_stacked_density(n_lines = 50,
                             palette_colors =
                               sample(c(RColorBrewer::brewer.pal(9, "Oranges"),
                                        RColorBrewer::brewer.pal(9, "Blues")),
-                                     100, replace = TRUE))
+                                     50, replace = TRUE)) + ggplot2::theme(plot.margin = ggplot2::unit(c(-4, -4, -4, -4), 'cm'))
 
-make_random_stacked_density(n_lines = 12, color_palette = "Purp")
-make_random_harmonograph(n = 50)
+make_random_stacked_density(n_lines = 50)
+make_random_harmonograph(n = 3, point_alpha = .1)
 make_random_stacked_area(groups = 30)
 # make_random_clifford_attractor(n_points = 10000000, point_alpha = .01)
 

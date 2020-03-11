@@ -17,7 +17,12 @@ Imports:
     grDevices,
     Rcpp,
     stats,
-    utils
+    utils,
+    imager,
+    deldir,
+    dplyr,
+    magrittr,
+    scales
 Suggests: 
     testthat (>= 2.1.0),
     covr
