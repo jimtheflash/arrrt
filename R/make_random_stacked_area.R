@@ -21,7 +21,7 @@ make_random_stacked_area <- function(groups = 20,
   }
   df <- do.call(rbind, df_list)
   df <- df[order(df$x, df$y), ]
-  df <- na.omit(df)
+  df <- stats::na.omit(df)
 
   # make plot
   gg <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y, color = z, fill = z)) +

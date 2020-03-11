@@ -1,52 +1,69 @@
+#' Draw a harmonograph using random data
+#' @details inspired by and based on https://fronkonstin.com/2014/10/13/beautiful-curves-the-harmonograph/
+#' @param n num how many parameter terms
+#' @param sequence num vector how many points to draw
+#' @param point_size num size of point in `geom_point`
+#' @param point_alpha num alpha of point in `geom_point`
+#' @param ... other args passed on to `geom_point`
+#' @return `ggplot` object
+#' @export
 make_random_harmonograph <- function(n = 4,
-                                     t) {
+                                     sequence = seq(0, 100, by = .001),
+                                     point_size = .5,
+                                     point_alpha = .5,
+                                     ...) {
 
-  f1=jitter(sample(c(2,3),1));f2=jitter(sample(c(2,3),1));f3=jitter(sample(c(2,3),1));f4=jitter(sample(c(2,3),1))
-  d1=runif(1,0,1e-02);d2=runif(1,0,1e-02);d3=runif(1,0,1e-02);d4=runif(1,0,1e-02)
-  p1=runif(1,0,pi);p2=runif(1,0,pi);p3=runif(1,0,pi);p4=runif(1,0,pi)
-  xt = function(t) exp(-d1*t)*sin(t*f1+p1)+exp(-d2*t)*sin(t*f2+p2)
-  yt = function(t) exp(-d3*t)*sin(t*f3+p3)+exp(-d4*t)*sin(t*f4+p4)
-  t=seq(1, 100, by=.001)
-  dat=data.frame(t=t, x=xt(t), y=yt(t))
-  with(dat, plot(x,y, type="l", xlim =c(-2,2), ylim =c(-2,2), xlab = "", ylab = "", xaxt='n', yaxt='n'))
-
-  n_list <- list()
+  # make some random parameters
+  param_list <- list()
 
   for (i in 1:n) {
     f <- jitter(sample(c(2, 3), 1))
     d <- stats::runif(1, 0, 1e-02)
     p <- stats::runif(1, 0, pi)
-    n_list[[length(n_list) + 1]] <- data.frame(f = f, d = d, p = p)
+    param_list[[length(param_list) + 1]] <- data.frame(
+      f = f,
+      d = d,
+      p = p)
   }
-  n_df <- do.call(rbind, n_list)
+  param_df <- do.call(rbind, param_list)
 
-  make_points <- function(n_df, t, even_odd) {
+  # make a function to generate points
+  make_points <- function(param_df, even_odd) {
+
+    # split into even and odd rows
     if (even_odd == 'even') {
       indices <- c(FALSE,  TRUE)
     } else {
       indices <- c(TRUE, FALSE)
     }
-    subsetted <- n_df[indices, ]
-    to_sum <- c()
-    for (j in 1:nrow(subsetted)) {
-      to_sum[[length(to_sum) + 1]]  <-
-        exp((-1 * subsetted$d[[j]]) * t) *
-        sin(t * subsetted$f[[j]] + subsetted$p[[j]])
+    # get only the rows we care about
+    subsetted <- param_df[indices, ]
+
+    # loop through sequence to make points
+    points <- c()
+    for (s in sequence) {
+      terms <- c()
+      for (r in 1:nrow(subsetted)) {
+        coefs <- subsetted[r, ]
+        # compute the term for those coefficients and time point
+        term <- exp((-1 * subsetted$d[[r]]) * s) *
+          sin(s * subsetted$f[[r]] + subsetted$p[[r]])
+        terms[[length(terms) + 1]] <- term
+      }
+      point <- sum(terms)
+      points[[length(points) + 1]] <- point
     }
-    summed <- sum(unlist(to_sum))
-    return(summed)
+    return(points)
   }
 
-  t <- time_sequence
-
   plot_data <- data.frame(
-    t = time_sequence,
-    x = make_points(n_df, t, 'even'),
-    y = make_points(n_df, t, 'odd')
+    t = sequence,
+    x = make_points(param_df, 'odd'),
+    y = make_points(param_df, 'even')
     )
 
   ggplot2::ggplot(plot_data, ggplot2::aes(x, y)) +
-    ggplot2::geom_line(size = .01) +
+    ggplot2::geom_point(size = .2, alpha = .1, ...) +
     ggplot2::coord_cartesian(xlim = c(-2, 2), ylim = c(-2, 2)) +
-    theme_arrrt()
+    arrrt::theme_arrrt()
 }

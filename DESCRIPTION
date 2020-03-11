@@ -1,12 +1,12 @@
 Package: arrrt
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Make Art With R
+Version: 0.0.1.9000
 Authors@R: 
     person(given = "Jim",
            family = "Kloet",
            role = c("aut", "cre"),
            email = "jim.kloet@gmail.com")
-Description: What the package does (one paragraph).
+Description: This package contains functions for making generative art using R. Most of the functions return ggplot objects.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -18,3 +18,6 @@ Imports:
     Rcpp,
     stats,
     utils
+Suggests: 
+    testthat (>= 2.1.0),
+    covr

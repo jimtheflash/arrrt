@@ -2,6 +2,7 @@
 
 export(get_palette_colors)
 export(make_random_clifford_attractor)
+export(make_random_harmonograph)
 export(make_random_scatterplot)
 export(make_random_stacked_area)
 export(make_random_stacked_density)
