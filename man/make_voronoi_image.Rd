@@ -4,12 +4,15 @@
 \alias{make_voronoi_image}
 \title{Reproduce an image using voronoi tesselations}
 \usage{
-make_voronoi_image(image_path = NULL, sample_size = 2000)
+make_voronoi_image(image_path = NULL, sample_size = 2000,
+  threshold = "10\%")
 }
 \arguments{
 \item{image_path}{chr path to image (currently a jpg but could be other formats)}
 
 \item{sample_size}{num how many points to sample when generating tiles}
+
+\item{threshold}{chr numbers followed by percent sign}
 }
 \value{
 `ggplot` object
