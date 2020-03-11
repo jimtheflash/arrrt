@@ -2,10 +2,12 @@
 #' @importFrom magrittr %>%
 #' @param image_path chr path to image (currently a jpg but could be other formats)
 #' @param sample_size num how many points to sample when generating tiles
+#' @param threshold chr numbers followed by percent sign
 #' @return `ggplot` object
 #' @export
 make_voronoi_image <- function(image_path = NULL,
-                               sample_size = 2000) {
+                               sample_size = 2000,
+                               threshold = '10%') {
 
   # Read and convert to grayscale
   x <- imager::load.image(image_path) %>%
@@ -48,7 +50,8 @@ make_voronoi_image <- function(image_path = NULL,
                                        y = y1,
                                        xend = x2,
                                        yend = y2),
-                          color = "black", lwd = 1) +
+                          color = "black",
+                          lwd = 1) +
     ggplot2::scale_x_continuous(expand = c(0,0)) +
     ggplot2::scale_y_continuous(expand = c(0,0), trans = scales::reverse_trans())
 
